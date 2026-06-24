@@ -50,8 +50,24 @@ Because PyInstaller cannot cross-compile across different operating systems, the
    ./run.sh
    ```
 
-### 2. Compiling the Linux Binary & building a Debian Package (.deb)
-To package the app as a native `.deb` installer on Linux:
+### 2. Compiling the Linux Binary, Debian Package (.deb), or AppImage
+You can package the app as a native `.deb` installer or a standalone `.AppImage` on Linux:
+
+#### Option A: Build AppImage (Standalone Executable)
+1. Make the scripts executable:
+   ```bash
+   chmod +x build_linux.sh build_appimage.sh
+   ```
+2. Run the AppImage packager:
+   ```bash
+   ./build_appimage.sh
+   ```
+This generates `Linux/IndiaMartScraper-x86_64.AppImage`, which you can run directly:
+```bash
+./IndiaMartScraper-x86_64.AppImage
+```
+
+#### Option B: Build Debian Package (.deb)
 1. Make the build scripts executable:
    ```bash
    chmod +x build_linux.sh build_deb.sh
@@ -60,7 +76,7 @@ To package the app as a native `.deb` installer on Linux:
    ```bash
    ./build_deb.sh
    ```
-This will compile the application via PyInstaller and pack it into a Debian installer: `Linux/indiamart-scraper_1.0.0_amd64.deb`.
+This compiles the application and packages it into `Linux/indiamart-scraper_1.0.0_amd64.deb`.
 3. To install it system-wide:
    ```bash
    sudo dpkg -i indiamart-scraper_1.0.0_amd64.deb

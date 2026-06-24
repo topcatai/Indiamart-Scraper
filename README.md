@@ -80,13 +80,24 @@ An automated suite is available in the `Linux/` folder to configure native graph
    ```
 2. **Configure dependencies & permissions**:
    ```bash
-   chmod +x setup.sh run.sh
+   chmod +x setup.sh run.sh build_linux.sh build_appimage.sh build_deb.sh
    ./setup.sh
    ```
 3. **Run the desktop app**:
    ```bash
    ./run.sh
    ```
+4. **Compile & Package (AppImage or Debian package)**:
+   * **To build a standalone `.AppImage`**:
+     ```bash
+     ./build_appimage.sh
+     ```
+     This generates `IndiaMartScraper-x86_64.AppImage` which runs directly.
+   * **To build a `.deb` installer**:
+     ```bash
+     ./build_deb.sh
+     ```
+     This generates `indiamart-scraper_1.0.0_amd64.deb` for native system-wide installation.
 
 > [!IMPORTANT]
 > **Linux Power & Sleep Settings**: Linux desktops (like Zorin/Ubuntu GNOME) suspend GPU/UI rendering when the session locks. This freezes Chromium automation.
