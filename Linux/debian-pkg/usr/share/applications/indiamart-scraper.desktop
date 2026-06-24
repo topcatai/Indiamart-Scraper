@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=IndiaMART Lead Scraper
+Comment=Scrape and manage IndiaMART leads
+Exec=/opt/indiamart-scraper/IndiaMartScraper
+Icon=/opt/indiamart-scraper/app/assets/icon.png
+Terminal=false
+Categories=Office;Business;
+StartupNotify=true
+StartupWMClass=IndiaMartScraper

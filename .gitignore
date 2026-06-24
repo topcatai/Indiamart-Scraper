@@ -1,0 +1,41 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# PyInstaller / Builds
+build/
+dist/
+*.spec
+Linux.zip
+
+# Chrome Profile / Session data
+.chrome_session/
+.gui_chrome_session/
+.test_chrome_session/
+.chrome_session*
+.gui_chrome_session*
+.test_chrome_session*
+
+# Scraping data and logs
+*.db
+*.xlsx
+*.csv
+*.log
+*.html
+*.txt
+
+# Keep configuration & shell script but exclude specific html dumps/logs
+!requirements.txt
+!build_linux.sh

@@ -1,0 +1,53 @@
+# Maintainer: IndiaMART Scraper Maintainer <support@codeberg.org>
+pkgname=indiamart-scraper
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Native desktop application for IndiaMART lead scraping"
+arch=('x86_64')
+url="https://codeberg.org/YOUR_USERNAME/YOUR_REPO_NAME"
+license=('MIT')
+depends=('qt6-webengine' 'nss' 'dbus' 'libxkbcommon-x11')
+makedepends=('python-pyinstaller' 'python-pyqt6' 'python-pyqt6-webengine' 'python-pandas' 'python-openpyxl')
+options=('!strip')
+source=("indiamart-scraper.desktop")
+sha256sums=('SKIP')
+
+prepare() {
+    # Create build source directory and copy local project files
+    mkdir -p "$srcdir/indiamart-scraper"
+    cp -rf "$startdir/../app" "$srcdir/indiamart-scraper/"
+    cp -rf "$startdir/../db_manager.py" "$srcdir/indiamart-scraper/"
+    cp -rf "$startdir/../config.py" "$srcdir/indiamart-scraper/"
+    cp -rf "$startdir/../requirements.txt" "$srcdir/indiamart-scraper/"
+}
+
+build() {
+    cd "$srcdir/indiamart-scraper"
+    
+    # Run PyInstaller compilation
+    pyinstaller --noconfirm --onedir --windowed \
+        --name=IndiaMartScraper \
+        --add-data="app/styles.qss:app" \
+        --add-data="app/assets/icon.png:app/assets" \
+        --clean \
+        app/main.py
+}
+
+package() {
+    cd "$srcdir/indiamart-scraper"
+    
+    # Create installation directories
+    install -d "$pkgdir/opt/indiamart-scraper"
+    install -d "$pkgdir/usr/bin"
+    install -d "$pkgdir/usr/share/applications"
+    
+    # Copy compiled PyInstaller files to /opt/
+    cp -r dist/IndiaMartScraper/* "$pkgdir/opt/indiamart-scraper/"
+    
+    # Create executable symlink
+    ln -sf /opt/indiamart-scraper/IndiaMartScraper "$pkgdir/usr/bin/indiamart-scraper"
+    
+    # Install desktop launcher
+    install -Dm644 "$startdir/debian-pkg/usr/share/applications/indiamart-scraper.desktop" \
+        "$pkgdir/usr/share/applications/indiamart-scraper.desktop"
+}

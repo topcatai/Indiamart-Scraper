@@ -1,0 +1,195 @@
+/* Main Window & Core Styling */
+QMainWindow {
+    background-color: #0f101d;
+}
+
+QSplitter::handle {
+    background-color: #25263d;
+    width: 2px;
+}
+
+/* Sidebar Widget */
+#sidebar {
+    background-color: #15162b;
+    border-right: 1px solid #25263d;
+    min-width: 80px;
+    max-width: 600px;
+}
+
+/* ScrollArea in Sidebar */
+QScrollArea {
+    border: none;
+    background-color: transparent;
+}
+
+#scrollAreaWidgetContents {
+    background-color: transparent;
+}
+
+/* Sidebar Headings */
+QLabel.section-header {
+    color: #8f94fb;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #25263d;
+    padding-bottom: 3px;
+}
+
+/* Stat Widgets Container */
+QFrame.stat-card {
+    background-color: #1e1f38;
+    border: 1px solid #2d2f52;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 8px;
+}
+
+QLabel.stat-title {
+    color: #a0a5c0;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+QLabel.stat-value {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 4px;
+}
+
+/* Specific Stat Value Colors */
+QLabel#valAll {
+    color: #ffffff;
+}
+
+QLabel#valScraped {
+    color: #4caf50;
+}
+
+QLabel#valFailed {
+    color: #f44336;
+}
+
+QLabel#valPending {
+    color: #ff9800;
+}
+
+/* General Buttons */
+QPushButton {
+    background-color: #1e1f38;
+    color: #ffffff;
+    border: 1px solid #2d2f52;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+QPushButton:hover {
+    background-color: #27294d;
+    border-color: #4e54c8;
+}
+
+QPushButton:pressed {
+    background-color: #1b1c33;
+}
+
+QPushButton:disabled {
+    background-color: #111221;
+    color: #555770;
+    border-color: #1e1f38;
+}
+
+/* Control Buttons (Start / Pause) */
+QPushButton#startBtn {
+    background-color: #4caf50;
+    color: #0f101d;
+    border: none;
+}
+
+QPushButton#startBtn:hover {
+    background-color: #66bb6a;
+}
+
+QPushButton#startBtn:pressed {
+    background-color: #388e3c;
+}
+
+QPushButton#pauseBtn {
+    background-color: #ff9800;
+    color: #0f101d;
+    border: none;
+}
+
+QPushButton#pauseBtn:hover {
+    background-color: #ffb74d;
+}
+
+QPushButton#pauseBtn:pressed {
+    background-color: #f57c00;
+}
+
+QPushButton#retryBtn {
+    background-color: #e91e63;
+    color: #ffffff;
+    border: none;
+}
+
+QPushButton#retryBtn:hover {
+    background-color: #ec407a;
+}
+
+QPushButton#retryBtn:pressed {
+    background-color: #c2185b;
+}
+
+/* Premium Button */
+QPushButton#crmBtn {
+    background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 #d4af37, stop:1 #aa7c11);
+    color: #0f101d;
+    border: none;
+    font-weight: bold;
+    font-size: 13px;
+    padding: 10px 12px;
+}
+
+QPushButton#crmBtn:hover {
+    background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 #ebd582, stop:1 #c59727);
+}
+
+QPushButton#crmBtn:pressed {
+    background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 #b8901c, stop:1 #8e6209);
+}
+
+/* Report Error Button */
+QPushButton#reportBtn {
+    background-color: #1e1f38;
+    color: #e57373;
+    border: 1px solid #5d2b2c;
+}
+
+QPushButton#reportBtn:hover {
+    background-color: #351e22;
+    border-color: #e57373;
+}
+
+QPushButton#reportBtn:pressed {
+    background-color: #241215;
+}
+
+
+
+/* Status Bar */
+QStatusBar {
+    background-color: #15162b;
+    color: #a0a5c0;
+    border-top: 1px solid #25263d;
+    font-size: 11px;
+}
+
+QStatusBar::item {
+    border: none;
+}

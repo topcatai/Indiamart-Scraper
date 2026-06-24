@@ -1,0 +1,20 @@
+#!/bin/sh
+set -e
+
+# Ensure the executable has correct permissions
+chmod 755 /opt/indiamart-scraper/IndiaMartScraper
+
+# Create a symlink to /usr/bin
+ln -sf /opt/indiamart-scraper/IndiaMartScraper /usr/bin/indiamart-scraper
+
+# Update Desktop entry database
+if [ -x "$(command -v update-desktop-database)" ]; then
+    update-desktop-database -q /usr/share/applications || true
+fi
+
+# Update system icon cache
+if [ -x "$(command -v gtk-update-icon-cache)" ]; then
+    gtk-update-icon-cache -f -t /usr/share/icons/hicolor || true
+fi
+
+exit 0
