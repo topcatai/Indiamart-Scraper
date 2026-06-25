@@ -601,9 +601,6 @@ class ScrapeWorker(QThread):
         self.is_paused = False
         self.is_running = True
         self.retry_mode = False
-        self.scheduler_date = None
-        self.daylight_start = None
-        self.daylight_end = None
         self.start_date_override = None
 
 
@@ -633,14 +630,6 @@ class ScrapeWorker(QThread):
         while self.is_paused and self.is_running:
             self.pause_cond.wait(self.mutex)
         self.mutex.unlock()
-
-    def check_daylight_hours(self):
-        """
-        Validates if current local time is inside the randomized 8-hour daylight window.
-        Blocks the thread with status updates if outside the window.
-        (Overridden: daylight limits are disabled, runs 24/7).
-        """
-        return True
 
 
     def log(self, message):
@@ -713,7 +702,6 @@ class ScrapeWorker(QThread):
             self.all_contacts_found.emit(all_contacts)
             
         while self.is_running:
-            self.check_daylight_hours()
             self.check_pause()
             if not self.is_running:
                 break
@@ -755,7 +743,6 @@ class ScrapeWorker(QThread):
             reached_end_of_list = False
             
             while self.is_running:
-                self.check_daylight_hours()
                 self.check_pause()
                 if not self.is_running:
                     break
@@ -1031,7 +1018,6 @@ class ScrapeWorker(QThread):
         current_filter_end = None
         
         for failed in failed_contacts:
-            self.check_daylight_hours()
             self.check_pause()
             if not self.is_running:
                 break

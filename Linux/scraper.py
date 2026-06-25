@@ -187,26 +187,8 @@ def set_custom_date_filter(page, start_date, end_date):
 
 class ScrapeScheduler:
     """
-    Manages scraping windows:
-    - Runs 24/7 (time scraping limits are disabled).
-    - Gracefully handles idle time sleep.
+    Manages scraping sleep intervals.
     """
-    def __init__(self):
-        self.current_date = None
-        self.today_start = None
-        self.today_stop = None
-
-    def initialize_day(self):
-        pass
-
-    def wait_for_allowed_time(self):
-        """Blocks execution until current time falls inside the allowed window."""
-        return True
-
-    def is_past_stop_time(self):
-        """Checks if the current time has passed today's stop window."""
-        return False
-
     def _incremental_sleep(self, seconds):
         """Sleeps in smaller 10-second increments so Ctrl+C breaks immediately."""
         end_time = time.time() + seconds
@@ -724,7 +706,6 @@ def run_scraper():
 
     # Track counts inside this active run window
     scraped_count = 0
-    reached_time_limit = False
     reached_run_limit = False
     reached_daily_limit = False
     
@@ -765,8 +746,6 @@ def run_scraper():
                     print("[!] Invalid date format. Please use DD-MM-YYYY format.")
             
     while True:
-        # 1. Blocks execution until inside the randomized 8 AM to 8 PM window (Mon-Sat)
-        scheduler.wait_for_allowed_time()
         
         # 2. Check if daily limit is reached for the day
         scraped_today = db_manager.get_scraped_today_count()
@@ -784,7 +763,6 @@ def run_scraper():
             print(f"\n[!] Daily scraping limit of {config.DAILY_LIMIT} leads has already been reached for today.")
             print(f"[*] Sleeping until tomorrow morning ({tomorrow_start.strftime('%A, %I:%M %p')}) for {sleep_seconds/3600:.1f} hours...")
             scheduler._incremental_sleep(sleep_seconds)
-            scheduler.current_date = None  # Reset date to regenerate scheduler times
             continue
             
         # Create the randomized delay generator
@@ -930,11 +908,6 @@ def run_scraper():
                 reached_end_of_list = False
                 
                 while True:
-                    # A. Check if we have passed today's stop time
-                    if scheduler.is_past_stop_time():
-                        print(f"\n[*] Reached today's randomized stop time of {scheduler.today_stop.strftime('%I:%M %p')}. Pausing browser.")
-                        reached_time_limit = True
-                        break
                         
                     # Locate all visible contact card elements in the left panel
                     cards = page.locator(config.LEFT_PANE_ITEMS).all()
@@ -1189,7 +1162,7 @@ def run_scraper():
                             page.wait_for_timeout(scroll_sleep * 1000)
                 
                 # Check exit condition of inner loop
-                if reached_run_limit or reached_daily_limit or reached_time_limit:
+                if reached_run_limit or reached_daily_limit:
                     break
                     
                 if reached_end_of_list:
