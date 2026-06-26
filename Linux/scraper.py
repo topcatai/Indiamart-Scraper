@@ -144,9 +144,9 @@ def set_custom_date_filter(page, start_date, end_date):
             print("[*] Custom Date already selected, skipping dropdown selection.")
             page.wait_for_timeout(500)
         
-        # 5. Click Start Date span target to ensure calendar popup is open
-        start_target = page.locator("#custom_date_start").first
-        start_target.click(timeout=5000)
+        # 5. Click Start Date span target to ensure calendar popup is open via JS
+        print("[*] Clicking start date target (#custom_date_start)...")
+        page.evaluate('document.querySelector("#custom_date_start").click()')
         page.wait_for_selector("#customDatePicker", timeout=3000)
         page.wait_for_timeout(500)
         
@@ -160,10 +160,9 @@ def set_custom_date_filter(page, start_date, end_date):
         print(f"[*] Clicking start day {start_date.day}...")
         _click_calendar_day(page, start_date.day)
         
-        # 7.5 Click End Date target to switch focus to end date input
+        # 7.5 Click End Date target to switch focus to end date input via JS
         print("[*] Clicking end date target (#custom_date_end)...")
-        end_target = page.locator("#custom_date_end").first
-        end_target.click(timeout=5000)
+        page.evaluate('document.querySelector("#custom_date_end").click()')
         page.wait_for_timeout(500)
         
         # 8. Navigate calendar to end year/month (only if month/year are different)
