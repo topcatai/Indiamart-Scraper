@@ -48,10 +48,24 @@ def _navigate_calendar_to(page, target_year, target_month_idx):
 def _click_calendar_day(page, day_num):
     """Clicks the specified day number in the active month of the calendar."""
     day_str = str(day_num)
-    day_locator = page.locator("#customDatePicker button.rdrDay:not(.rdrDayPassive):not(.rdrDayDisabled)").filter(
-        has_text=re.compile(rf"^\s*{day_str}\s*$")
-    ).first
-    day_locator.click(timeout=5000)
+    success = page.evaluate(f"""
+    (function() {{
+        var buttons = Array.from(document.querySelectorAll("#customDatePicker button.rdrDay:not(.rdrDayPassive):not(.rdrDayDisabled)"));
+        var target = "{day_str}".trim();
+        for (var i = 0; i < buttons.length; i++) {{
+            var btn = buttons[i];
+            var numSpan = btn.querySelector('.rdrDayNumber span');
+            var text = numSpan ? numSpan.innerText.trim() : btn.innerText.trim();
+            if (text === target) {{
+                btn.click();
+                return true;
+            }}
+        }}
+        return false;
+    }})()
+    """)
+    if not success:
+        raise RuntimeError(f"Could not click calendar day {day_num} via JS")
     page.wait_for_timeout(1000)
 
 def set_custom_date_filter(page, start_date, end_date):
