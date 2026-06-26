@@ -9,6 +9,7 @@ class Sidebar(QWidget):
     start_clicked = pyqtSignal()
     pause_clicked = pyqtSignal()
     retry_clicked = pyqtSignal()
+    reset_db_clicked = pyqtSignal()
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -76,6 +77,12 @@ class Sidebar(QWidget):
         self.retry_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         self.retry_btn.clicked.connect(self.retry_clicked.emit)
         scroll_layout.addWidget(self.retry_btn)
+
+        self.reset_db_btn = QPushButton("Start Afresh (Reset DB)")
+        self.reset_db_btn.setObjectName("resetDbBtn")
+        self.reset_db_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.reset_db_btn.clicked.connect(self.reset_db_clicked.emit)
+        scroll_layout.addWidget(self.reset_db_btn)
 
         # ------------------ EXPORTS SECTION ------------------
         scroll_layout.addWidget(self._create_header("Exports"))

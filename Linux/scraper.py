@@ -23,6 +23,7 @@ def parse_cli_args():
     parser.add_argument("--start", help="Start date (YYYY-MM-DD) for scraping", default=None)
     parser.add_argument("--end", help="End date (YYYY-MM-DD) for scraping", default=None)
     parser.add_argument("--reset", action="store_true", help="Reset Chrome profile cache")
+    parser.add_argument("--reset-db", action="store_true", help="Reset SQLite database (delete all progress and start afresh)")
     args, unknown = parser.parse_known_args()
     return args
 
@@ -716,6 +717,16 @@ def run_scraper():
                 print("[+] Chrome profile reset completed successfully.")
             except Exception as e:
                 print(f"[!] Warning: Could not delete Chrome profile directory: {e}")
+
+    # Handle reset-db flag
+    if args.reset_db:
+        if os.path.exists(config.DB_PATH):
+            print(f"[*] Reset DB flag detected. Deleting database file: {config.DB_PATH}")
+            try:
+                os.remove(config.DB_PATH)
+                print("[+] Database reset completed successfully. Scraping will start afresh.")
+            except Exception as e:
+                print(f"[!] Warning: Could not delete database file: {e}")
 
     # Track counts inside this active run window
     scraped_count = 0

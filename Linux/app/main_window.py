@@ -318,6 +318,7 @@ class MainWindow(QMainWindow):
         self.sidebar.start_clicked.connect(self.start_scraping)
         self.sidebar.pause_clicked.connect(self.pause_scraping)
         self.sidebar.retry_clicked.connect(self.start_retry)
+        self.sidebar.reset_db_clicked.connect(self.reset_database)
 
         # Scrape worker instance variable
         self.scrape_worker = None
@@ -407,6 +408,71 @@ class MainWindow(QMainWindow):
         }})()
         """
         self.web_page.runJavaScript(script, callback)
+
+    def reset_database(self):
+        from PyQt6.QtWidgets import QMessageBox
+        # 1. Ask for user confirmation
+        reply = QMessageBox.question(
+            self,
+            "Start Afresh (Reset Database)",
+            "Are you sure you want to start afresh?\n\n"
+            "This will permanently delete all scraped leads, completed periods, and failed contacts "
+            "from the local database.\n\n"
+            "This action cannot be undone.",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No
+        )
+        if reply != QMessageBox.StandardButton.Yes:
+            return
+
+        # 2. Stop/pause scraping if active
+        if self.scrape_worker and self.scrape_worker.isRunning():
+            self.scrape_worker.terminate()
+            self.scrape_worker.wait()
+            self.scrape_worker = None
+
+        self.is_paused = False
+        self.sidebar.set_scraping_state(False)
+
+        # 3. Close DB connection and delete DB file
+        import db_manager
+        import os
+        import config
+        
+        print("[*] Starting afresh: Deleting database file...")
+        self.log_console.append_log("Starting database reset...")
+        
+        try:
+            # We delete the database file directly to ensure full reset
+            if os.path.exists(config.DB_PATH):
+                os.remove(config.DB_PATH)
+            
+            # Re-initialize a fresh database schema
+            db_manager.init_db()
+            
+            self.status_bar.show_message("Database reset successfully.")
+            self.log_console.append_log("Local SQLite database deleted and recreated successfully.")
+            self.log_console.append_log("All scraping progress cleared. You are ready to start afresh.")
+            
+            # 4. Refresh stats on sidebar to 0
+            self.sidebar.all_contacts_count = 0
+            self.sidebar.val_all.setText("0")
+            self.sidebar.refresh_stats()
+            
+            QMessageBox.information(
+                self,
+                "Reset Successful",
+                "The database has been reset successfully!\n\n"
+                "All scraping progress is cleared. Click 'Start Scrape' to set a new start date and begin afresh."
+            )
+        except Exception as e:
+            QMessageBox.critical(
+                self,
+                "Reset Failed",
+                f"Could not reset the database: {e}\n\n"
+                "Please check if another program has locked the database file and try again."
+            )
+            self.log_console.append_log(f"Error resetting database: {e}")
 
     def start_scraping(self):
         if self.scrape_worker and self.scrape_worker.isRunning():

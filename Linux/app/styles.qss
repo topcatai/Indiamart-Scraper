@@ -178,9 +178,20 @@ QPushButton#reportBtn:hover {
 
 QPushButton#reportBtn:pressed {
     background-color: #241215;
+}QPushButton#resetDbBtn {
+    background-color: #1e1f38;
+    color: #ff5252;
+    border: 1px solid #5c2020;
 }
 
+QPushButton#resetDbBtn:hover {
+    background-color: #351a1d;
+    border-color: #ff5252;
+}
 
+QPushButton#resetDbBtn:pressed {
+    background-color: #241012;
+}
 
 /* Status Bar */
 QStatusBar {
